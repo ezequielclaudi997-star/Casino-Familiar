@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getFirestore, doc, setDoc, onSnapshot, collection, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 const firebaseConfig = {
     apiKey: "AIzaSyB8FoVxL4907KcKyiabnzFnsgVopXnlNpY",
-    authDomain: "://casino-familiar.firebaseapp.com",
+    authDomain: "casino-familiar.firebaseapp.com",
     projectId: "casino-familiar",
     storageBucket: "casino-familiar.firebasestorage.app",
     messagingSenderId: "27006831566",
