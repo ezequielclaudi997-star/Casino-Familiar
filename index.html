@@ -41,7 +41,7 @@
 
     <div id="sala" class="caja oculto">
         <div class="barra">
-            <span>👤 <b id="txt-user"></b></span>
+            <span style="cursor:pointer; user-select:none;">👤 <b id="txt-user"></b></span>
             <span style="color:var(--green); font-size:18px;">🪙 <b id="txt-saldo">0</b></span>
         </div>
         <div class="tabs">
@@ -79,10 +79,8 @@
             <h3>🏆 RANKING FAMILIAR EN VIVO</h3>
             <div id="lista-ranking">Cargando posiciones...</div>
         </div>
-                <hr style="border-color:#334155; margin:20px 0;">
-        <button type="button" id="btn-cajero" class="gris">🔑 Panel de Cajero Central</button>
-        <div id="box-cajero" class="oculto" style="margin-top:10px;">
-            <p style="font-size:13px; color:var(--accent); text-align:center;">Gestionar fichas de todos los jugadores:</p>
+        <div id="box-cajero" class="oculto" style="margin-top:15px; border-top:1px dashed #475569; padding-top:10px;">
+            <p style="font-size:13px; color:var(--accent); text-align:center;">Gestión de fichas:</p>
             <div id="lista-cajero"></div>
         </div>
     </div>
@@ -90,3 +88,4 @@
     <script type="module" src="./app.js"></script>
 </body>
 </html>
+
