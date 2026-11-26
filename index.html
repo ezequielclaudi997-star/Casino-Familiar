@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino Familiar VIP</title>
+    <style>
+        :root {
+            --bg-main: #080b12; --bg-header: #0f1522; --bg-card: #151d2e;
+            --neon: #00e676; --gold: #fbbf24; --red: #ff3b5c; --blue: #38bdf8;
+            --text: #f8fafc; --muted: #94a3b8;
+        }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+        body { background: var(--bg-main); color: var(--text); margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        .topbar {
+            width: 100%; background: var(--bg-header); border-bottom: 1px solid #1e293b;
+            padding: 12px 18px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 50;
+        }
+        .brand { font-size: 20px; font-weight: 900; display: flex; align-items: center; gap: 6px; }
+        .brand .g2 { color: var(--neon); }
+        .user-wallet { display: flex; align-items: center; gap: 8px; }
+        .saldo-pill { background: #090d16; border: 1px solid var(--neon); color: var(--neon); padding: 6px 14px; border-radius: 50px; font-weight: 800; font-size: 15px; }
+        .user-badge { background: var(--bg-card); padding: 6px 12px; border-radius: 50px; font-size: 13px; font-weight: 700; border: 1px solid #28354d; cursor: pointer; user-select: none; }
+        .wrapper { width: 100%; max-width: 480px; padding: 15px; }
+        .login-box { background: var(--bg-card); border: 1px solid #26334d; border-radius: 18px; padding: 30px 22px; margin-top: 40px; text-align: center; }
+        .hero-banner { background: linear-gradient(135deg, #064e3b 0%, #0f172a 60%, #1e1b4b 100%); border: 1px solid rgba(0,230,118,0.35); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
+        .hero-tag { background: var(--neon); color: #000; font-size: 11px; font-weight: 900; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 6px; }
+        input { width: 100%; padding: 14px; margin: 10px 0; border-radius: 10px; background: #090d16; color: #fff; border: 1px solid #2d3b55; font-size: 15px; }
+        .btn { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .btn-neon { background: var(--neon); color: #04130a; }
+        .btn-gold { background: var(--gold); color: #000; }
+        .btn-blue { background: var(--blue); color: #04130a; }
+        .cat-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+        .cat-item { background: var(--bg-card); border: 1px solid #233047; border-radius: 12px; padding: 10px 4px; text-align: center; cursor: pointer; color: var(--muted); font-size: 12px; font-weight: 700; }
+        .cat-item .ico { font-size: 22px; display: block; margin-bottom: 4px; }
+        .cat-item.active { border-color: var(--neon); color: var(--neon); background: #132a24; }
+        .game-panel { background: var(--bg-card); border: 1px solid #233047; border-radius: 16px; padding: 20px; }
+        .slot-machine { display: flex; justify-content: space-around; background: #070a10; padding: 22px 10px; border-radius: 14px; border: 2px solid #26354d; font-size: 48px; margin: 15px 0; }
+        .grid-minas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+        .celda { aspect-ratio: 1; background: #1e293b; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; }
+        .dado-screen { font-size: 46px; font-weight: 900; padding: 22px; background: #070a10; border-radius: 14px; margin: 12px 0; text-align: center; color: var(--gold); }
+        .rank-card, .cajero-row { display: flex; justify-content: space-between; align-items: center; background: #0b101b; padding: 10px 14px; margin: 6px 0; border-radius: 10px; }
+        .cajero-btns { display: flex; gap: 5px; }
+        .cajero-btns button { width: auto; padding: 6px 10px; font-size: 12px; margin: 0; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
+        .oculto { display: none !important; }
+    </style>
+    <script src="https://www.gstatic.com.firebase-app-compat.js`"></script>
+    <script src="https://gstatic.com.firebase-firestore-compat.js`"></script>
+</head>
+<body>
+
+    <div class="topbar">
+        <div class="brand">🎰 <span>CASINO</span><span class="g2">FAMILIAR</span></div>
+        <div id="header-user" class="user-wallet oculto">
+            <div class="user-badge" onclick="toqueSecreta()">👤 <span id="txt-user"></span></div>
+            <div class="saldo-pill">🪙 <span id="txt-saldo">1000</span></div>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div id="login" class="login-box">
+            <div style="font-size: 42px; margin-bottom: 10px;">👑</div>
+            <h2 style="margin:0 0 6px 0;">CASINO FAMILIAR VIP</h2>
+            <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">Ingresa tu nombre para jugar</p>
+            <input type="text" id="nombre" placeholder="Tu nombre o apodo...">
+            <button type="button" onclick="iniciarSesion()" class="btn btn-neon">JUGAR AHORA</button>
+        </div>
+
+        <div id="sala" class="oculto">
+            <div class="hero-banner">
+                <span class="hero-tag">🔥 Sala VIP En Vivo</span>
+                <h2 style="margin:0 0 4px 0; font-size:20px;">¡Multiplicá tus fichas!</h2>
+                <p style="margin:0; font-size:12px; color:#cbd5e1;">Jackpot x10 en Slots • Retiro al instante en Minas</p>
+            </div>
+
+            <div class="cat-bar">
+                <div id="t-slots" class="cat-item active" onclick="verTab('slots')"><span class="ico">🍒</span>Slots</div>
+                <div id="t-minas" class="cat-item" onclick="verTab('minas')"><span class="ico">💣</span>Minas</div>
+                <div id="t-dados" class="cat-item" onclick="verTab('dados')"><span class="ico">🎲</span>Dados</div>
+                <div id="t-rank" class="cat-item" onclick="verTab('rank')"><span class="ico">🏆</span>Ranking</div>
+            </div>
+
+            <div id="v-slots" class="game-panel">
+                <h3 style="margin:0 0 6px 0;">🍒 TRAGAMONEDAS</h3>
+                <p style="font-size:12px; color:var(--muted); margin:0;">Par = x2 • Triple = x5 • 3 Diamantes 💎 = x10</p>
+                <div class="slot-machine"><span id="r1">🍒</span><span id="r2">🍋</span><span id="r3">💎</span></div>
+                <p id="slot-msg" style="text-align:center; font-weight:800; min-height:22px;"></p>
+                <input type="number" id="apuesta-slot" value="100" min="10">
+                <button type="button" id="btn-girar" onclick="girarSlot()" class="btn btn-neon">🎰 GIRAR</button>
+            </div>
+
+            <div id="v-minas" class="game-panel oculto">
+                <h3 style="margin:0 0 6px 0;">💣 MINAS (4x4)</h3>
+                <input type="number" id="apuesta-minas" value="100" min="10">
+                <button type="button" id="btn-jugar-minas" onclick="empezarMinas()" class="btn btn-neon">APOSTAR Y EMPEZAR</button>
+                <button type="button" id="btn-retirar" onclick="retirarMinas()" class="btn btn-gold oculto">💰 RETIRAR: 🪙 <span id="txt-ganancia">0</span></button>
+                <div class="grid-minas" id="tablero"></div>
+            </div>
+
+            <div id="v-dados" class="game-panel oculto">
+                <h3 style="margin:0 0 6px 0;">🎲 DADOS (x2)</h3>
+                <div id="dado-num" class="dado-screen">🎲 --</div>
+                <p id="dado-msg" style="text-align:center; font-weight:800; min-height:22px;"></p>
+                <input type="number" id="apuesta-dados" value="100" min="10">
+                <div style="display:flex; gap:8px;">
+                    <button type="button" onclick="jugarDado('menor')" class="btn btn-blue">🔽 Menor a 50</button>
+                    <button type="button" onclick="jugarDado('mayor')" class="btn btn-neon">🔼 Mayor a 50</button>
+                </div>
+            </div>
+
+            <div id="v-rank" class="game-panel oculto">
+                <h3 style="margin:0 0 10px 0;">🏆 RANKING EN VIVO</h3>
+                <div id="lista-ranking">Cargando...</div>
+            </div>
+
+            <div id="box-cajero" class="game-panel oculto" style="margin-top:16px; border-color:var(--gold);">
+                <h3 style="margin:0 0 10px 0; color:var(--gold);">🔑 CAJERO CENTRAL</h3>
+                <div id="lista-cajero"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyB8FoVxL4907KcKyiabnzFnsgVopXnlNpY",
+            authDomain: "://casino-familiar.firebaseapp.com",
+            projectId: "casino-familiar",
+            storageBucket: "casino-familiar.firebasestorage.app",
+            messagingSenderId: "27006831566",
+            appId: "1:27006831566:web:bb57b3a613b85bca26799f"
+        };
+
+        var db = null;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+        } catch (e) { console.log(e); }
+
+        var usuario = "", saldo = 1000, jugandoMinas = false, gananciaMinas = 0, bombas = [], toques = 0;
+
+        function iniciarSesion() {
+            var n = document.getElementById("nombre").value.trim();
+            if (!n) { alert("Escribe un nombre"); return; }
+            usuario = n;
+            document.getElementById("txt-user").innerText = usuario;
+            document.getElementById("header-user").classList.remove("oculto");
+            document.getElementById("login").classList.add("oculto");
+            document.getElementById("sala").classList.remove("oculto");
+   dibujarMinas()
+if (db) {
+                var ref = db.collection("jugadores").doc(usuario);
+                ref.onSnapshot(function(doc) {
+                    if (!doc.exists) {
+                        ref.set({ nombre: usuario, fichas: 1000 });
+                    } else {
+                        saldo = doc.data().fichas;
+                        document.getElementById("txt-saldo").innerText = saldo.toLocaleString();
+                    }
+                });
+
+                db.collection("jugadores").onSnapshot(function(snap) {
+                    var lista = [];
+                    snap.forEach(function(d) { lista.push(d.data()); });
+                    lista.sort(function(a, b) { return b.fichas - a.fichas; });
+                    var hr = "", hc = "";
+                    for (var i = 0; i < lista.length; i++) {
+                        var j = lista[i];
+                        hr += '<div class="rank-card"><span><b>#' + (i+1) + '</b> ' + j.nombre + '</span><span style="color:var(--neon);font-weight:800;">🪙 ' + j.fichas.toLocaleString() + '</span></div>';
+                        hc += '<div class="cajero-row"><div><b>' + j.nombre + '</b><br><span style="color:var(--neon)">🪙 ' + j.fichas + '</span></div><div class="cajero-btns"><button style="background:var(--neon);color:#000" onclick="modFichas(\'' + j.nombre + '\',1000)">+1k</button><button style="background:var(--neon);color:#000" onclick="modFichas(\'' + j.nombre + '\',5000)">+5k</button><button style="background:var(--red);color:#fff" onclick="modFichas(\'' + j.nombre + '\',-1000)">-1k</button></div></div>';
+                    }
+                    document.getElementById("lista-ranking").innerHTML = hr;
+                    document.getElementById("lista-cajero").innerHTML = hc;
+                });
+            }
+        }
+
+        function sumarSaldo(delta) {
+            saldo += delta;
+            document.getElementById("txt-saldo").innerText = saldo.toLocaleString();
+            if (db && usuario) {
+                db.collection("jugadores").doc(usuario).update({ fichas: firebase.firestore.FieldValue.increment(delta) });
+            }
+        }
+
+        function modFichas(jug, cant) {
+            if (db) db.collection("jugadores").doc(jug).update({ fichas: firebase.firestore.FieldValue.increment(cant) });
+        }
+
+        function verTab(tab) {
+            if (jugandoMinas) { alert("Termina tu partida de Minas primero"); return; }
+            var tabs = ["slots", "minas", "dados", "rank"];
+            for (var i = 0; i < tabs.length; i++) {
+                document.getElementById("v-" + tabs[i]).classList.add("oculto");
+                document.getElementById("t-" + tabs[i]).classList.remove("active");
+            }
+            document.getElementById("v-" + tab).classList.remove("oculto");
+            document.getElementById("t-" + tab).classList.add("active");
+        }
+
+        function toqueSecreta() {
+            toques++;
+            if (toques >= 5) {
+                toques = 0;
+                if (prompt("Código:") === "Marina22@") document.getElementById("box-cajero").classList.toggle("oculto");
+            }
+        }
+
+        var simbolos = ["🍒", "🍋", "🍇", "🔔", "💎"];
+        function girarSlot() {
+            var ap = parseInt(document.getElementById("apuesta-slot").value);
+            if (isNaN(ap) || ap <= 0 || ap > saldo) { alert("Fichas insuficientes"); return; }
+            var btn = document.getElementById("btn-girar");
+            btn.disabled = true;
+            sumarSaldo(-ap);
+            var v = 0;
+            var iv = setInterval(function() {
+                var s1 = simbolos[Math.floor(Math.random()*5)], s2 = simbolos[Math.floor(Math.random()*5)], s3 = simbolos[Math.floor(Math.random()*5)];
+                document.getElementById("r1").innerText = s1; document.getElementById("r2").innerText = s2; document.getElementById("r3").innerText = s3;
+                v++;
+                if (v >= 10) {
+                    clearInterval(iv); btn.disabled = false;
+                    var msg = document.getElementById("slot-msg");
+                    if (s1 === "💎" && s2 === "💎" && s3 === "💎") { sumarSaldo(ap*10); msg.style.color="var(--gold)"; msg.innerText="💎 ¡JACKPOT x10! +" + (ap*10); }
+                    else if (s1 === s2 && s2 === s3) { sumarSaldo(ap*5); msg.style.color="var(--neon)"; msg.innerText="🎉 ¡TRIPLE x5! +" + (ap*5); }
+                    else if (s1 === s2 || s2 === s3 || s1 === s3) { sumarSaldo(ap*2); msg.style.color="var(--neon)"; msg.innerText="✨ ¡PAR x2! +" + (ap*2); }
+                    else { msg.style.color="var(--red)"; msg.innerText="❌ Sin premio"; }
+                }
+            }, 80);
+        }
+
+        function dibujarMinas() {
+            var t = document.getElementById("tablero"); t.innerHTML = "";
+            for (var i = 0; i < 16; i++) {
+                var d = document.createElement("div"); d.className = "celda"; d.innerText = "❓"; d.setAttribute("data-i", i);
+                d.onclick = function() {
+                    if (!jugandoMinas || this.innerText !== "❓") return;
+                    var idx = parseInt(this.getAttribute("data-i"));
+                    if (bombas.indexOf(idx) !== -1) { this.innerText = "💣"; this.style.background = "#7f1d1d"; jugandoMinas = false; alert("💥 ¡BOOM!"); finMinas(); }
+                    else { this.innerText = "💎"; this.style.background = "#064e3b"; gananciaMinas = Math.floor(gananciaMinas * 1.25); document.getElementById("txt-ganancia").innerText = gananciaMinas; }
+                };
+                t.appendChild(d);
+            }
+        }
+
+        function empezarMinas() {
+            var ap = parseInt(document.getElementById("apuesta-minas").value);
+            if (isNaN(ap) || ap <= 0 || ap > saldo) { alert("Fichas insuficientes"); return; }
+            sumarSaldo(-ap); gananciaMinas = ap; jugandoMinas = true; bombas = [];
+            while (bombas.length < 3) { var r = Math.floor(Math.random()*16); if (bombas.indexOf(r) === -1) bombas.push(r); }
+            document.getElementById("txt-ganancia").innerText = gananciaMinas;
+            document.getElementById("btn-jugar-minas").classList.add("oculto");
+            document.getElementById("btn-retirar").classList.remove("oculto");
+            dibujarMinas();
+        }
+
+        function retirarMinas() {
+            if (!jugandoMinas) return;
+            sumarSaldo(gananciaMinas); alert("🎉 ¡Retiraste 🪙 " + gananciaMinas + "!"); finMinas();
+        }
+
+        function finMinas() {
+            jugandoMinas = false;
+            document.getElementById("btn-jugar-minas").classList.remove("oculto");
+            document.getElementById("btn-retirar").classList.add("oculto");
+        }
+
+        function jugarDado(tipo) {
+            var ap = parseInt(document.getElementById("apuesta-dados").value);
+            if (isNaN(ap) || ap <= 0 || ap > saldo) { alert("Fichas insuficientes"); return; }
+            sumarSaldo(-ap);
+            var num = Math.floor(Math.random()*100) + 1;
+            document.getElementById("dado-num").innerText = "🎲 " + num;
+            var msg = document.getElementById("dado-msg");
+            if ((tipo === "menor" && num < 50) || (tipo === "mayor" && num > 50)) { sumarSaldo(ap*2); msg.style.color="var(--neon)"; msg.innerText="🎉 ¡Ganaste +" + (ap*2) + "!"; }
+            else { msg.style.color="var(--red)"; msg.innerText="❌ Perdiste"; }
+        }
+    </script>
+</body>
+</html>
