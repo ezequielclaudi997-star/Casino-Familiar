@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, collection, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, onSnapshot, collection, updateDoc, increment } from "https://gstatic.com";
+
 const firebaseConfig = {
     apiKey: "AIzaSyB8FoVxL4907KcKyiabnzFnsgVopXnlNpY",
     authDomain: "casino-familiar.firebaseapp.com",
@@ -18,37 +19,42 @@ document.getElementById("btn-entrar").onclick = async function() {
     const nombre = document.getElementById("nombre").value.trim();
     if (!nombre) { alert("Escribe un nombre"); return; }
     usuarioActual = nombre;
-    const userRef = doc(db, "jugadores", usuarioActual);
-    
-    onSnapshot(userRef, async function(docSnap) {
-        if (!docSnap.exists()) {
-            await setDoc(userRef, { nombre: usuarioActual, fichas: 1000 });
-        } else {
-            saldoActual = docSnap.data().fichas;
-            document.getElementById("txt-saldo").innerText = saldoActual.toLocaleString();
-        }
-    });
-
-    onSnapshot(collection(db, "jugadores"), function(snapshot) {
-        let jugadores = [];
-        snapshot.forEach(function(d) { jugadores.push(d.data()); });
-        jugadores.sort(function(a, b) { return b.fichas - a.fichas; });
-
-        let htmlRank = "";
-        let htmlCajero = "";
-        for (let i = 0; i < jugadores.length; i++) {
-            let j = jugadores[i];
-            htmlRank += '<div class="ranking-item"><span><b>#' + (i + 1) + '</b> ' + j.nombre + '</span><span style="color:var(--green); font-weight:bold;">🪙 ' + j.fichas.toLocaleString() + '</span></div>';
-            htmlCajero += '<div class="cajero-row"><div><b>' + j.nombre + '</b><br><span style="color:var(--green)">🪙 ' + j.fichas + '</span></div><div class="cajero-btns"><button class="verde" onclick="modificarFichas(\'' + j.nombre + '\', 1000)">+1k</button><button class="verde" onclick="modificarFichas(\'' + j.nombre + '\', 5000)">+5k</button><button class="rojo" onclick="modificarFichas(\'' + j.nombre + '\', -1000)">-1k</button></div></div>';
-        }
-        document.getElementById("lista-ranking").innerHTML = htmlRank;
-        document.getElementById("lista-cajero").innerHTML = htmlCajero;
-    });
 
     document.getElementById("txt-user").innerText = usuarioActual;
+    document.getElementById("header-user").classList.remove("oculto");
     document.getElementById("login").classList.add("oculto");
     document.getElementById("sala").classList.remove("oculto");
     crearTableroMinas();
+
+    try {
+        const userRef = doc(db, "jugadores", usuarioActual);
+        onSnapshot(userRef, async function(docSnap) {
+            if (!docSnap.exists()) {
+                await setDoc(userRef, { nombre: usuarioActual, fichas: 1000 });
+            } else {
+                saldoActual = docSnap.data().fichas;
+                document.getElementById("txt-saldo").innerText = saldoActual.toLocaleString();
+            }
+        });
+
+        onSnapshot(collection(db, "jugadores"), function(snapshot) {
+            let jugadores = [];
+            snapshot.forEach(function(d) { jugadores.push(d.data()); });
+            jugadores.sort(function(a, b) { return b.fichas - a.fichas; });
+
+            let htmlRank = "";
+            let htmlCajero = "";
+            for (let i = 0; i < jugadores.length; i++) {
+                let j = jugadores[i];
+                htmlRank += '<div class="rank-card"><span><b>#' + (i + 1) + '</b> ' + j.nombre + '</span><span style="color:var(--neon-green); font-weight:800;">🪙 ' + j.fichas.toLocaleString() + '</span></div>';
+                htmlCajero += '<div class="cajero-row"><div><b>' + j.nombre + '</b><br><span style="color:var(--neon-green)">🪙 ' + j.fichas + '</span></div><div class="cajero-btns"><button style="background:var(--neon-green);color:#000" onclick="modificarFichas(\'' + j.nombre + '\', 1000)">+1k</button><button style="background:var(--neon-green);color:#000" onclick="modificarFichas(\'' + j.nombre + '\', 5000)">+5k</button><button style="background:var(--red);color:#fff" onclick="modificarFichas(\'' + j.nombre + '\', -1000)">-1k</button></div></div>';
+            }
+            document.getElementById("lista-ranking").innerHTML = htmlRank;
+            document.getElementById("lista-cajero").innerHTML = htmlCajero;
+        });
+    } catch (e) {
+        console.error(e);
+    }
 };
 
 window.modificarFichas = async function(nombreJugador, cantidad) {
@@ -65,10 +71,10 @@ vistas.forEach(function(v) {
         if (jugandoMinas) { alert("Termina tu partida de Minas primero"); return; }
         vistas.forEach(function(x) {
             document.getElementById("v-" + x).classList.add("oculto");
-            document.getElementById("t-" + x).classList.add("gris");
+            document.getElementById("t-" + x).classList.remove("active");
         });
         document.getElementById("v-" + v).classList.remove("oculto");
-        this.classList.remove("gris");
+        this.classList.add("active");
     };
 });
 
@@ -107,13 +113,13 @@ document.getElementById("btn-girar").onclick = async function() {
             const msg = document.getElementById("slot-msg");
             if (s1 === "💎" && s2 === "💎" && s3 === "💎") {
                 await cambiarSaldoPropio(ap * 10);
-                msg.style.color = "var(--accent)"; msg.innerText = "💎 ¡JACKPOT x10! Ganaste 🪙 " + (ap * 10);
+                msg.style.color = "var(--gold)"; msg.innerText = "💎 ¡JACKPOT x10! Ganaste 🪙 " + (ap * 10);
             } else if (s1 === s2 && s2 === s3) {
                 await cambiarSaldoPropio(ap * 5);
-                msg.style.color = "var(--green)"; msg.innerText = "🎉 ¡TRIPLE x5! Ganaste 🪙 " + (ap * 5);
+                msg.style.color = "var(--neon-green)"; msg.innerText = "🎉 ¡TRIPLE x5! Ganaste 🪙 " + (ap * 5);
             } else if (s1 === s2 || s2 === s3 || s1 === s3) {
                 await cambiarSaldoPropio(ap * 2);
-                msg.style.color = "var(--green)"; msg.innerText = "✨ ¡PAR x2! Ganaste 🪙 " + (ap * 2);
+                msg.style.color = "var(--neon-green)"; msg.innerText = "✨ ¡PAR x2! Ganaste 🪙 " + (ap * 2);
             } else {
                 msg.style.color = "var(--red)"; msg.innerText = "❌ Sin premio, sigue intentando";
             }
@@ -133,7 +139,7 @@ function crearTableroMinas() {
                 this.innerText = "💣"; this.style.background = "#7f1d1d";
                 jugandoMinas = false; alert("💥 ¡BOOM! Tocaste una bomba"); finMinas();
             } else {
-                this.innerText = "💎"; this.style.background = "#14532d";
+                this.innerText = "💎"; this.style.background = "#064e3b";
                 gananciaMinas = Math.floor(gananciaMinas * 1.25);
                 document.getElementById("txt-ganancia").innerText = gananciaMinas;
             }
@@ -172,9 +178,8 @@ async function tirarDado(tipo) {
     document.getElementById("dado-num").innerText = "🎲 " + num;
     const msg = document.getElementById("dado-msg");
     if ((tipo === "menor" && num < 50) || (tipo === "mayor" && num > 50)) {
-        await cambiarSaldoPropio(ap * 2); msg.style.color = "var(--green)"; msg.innerText = "🎉 ¡Ganaste 🪙 " + (ap * 2) + "!";
+        await cambiarSaldoPropio(ap * 2); msg.style.color = "var(--neon-green)"; msg.innerText = "🎉 ¡Ganaste 🪙 " + (ap * 2) + "!";
     } else { msg.style.color = "var(--red)"; msg.innerText = "❌ Perdiste"; }
 }
 document.getElementById("btn-menor").onclick = function() { tirarDado("menor"); };
 document.getElementById("btn-mayor").onclick = function() { tirarDado("mayor"); };
-
