@@ -3,89 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casino Familiar VIP</title>
+    <title>Gana En Casa VIP - Lobby Familiar</title>
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --accent: #eab308; --green: #22c55e; --red: #ef4444; --blue: #3b82f6; --text: #f8fafc; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: var(--bg); color: var(--text); margin: 0; padding: 15px; display: flex; justify-content: center; }
-        .caja { background: var(--card); padding: 20px; border-radius: 16px; width: 100%; max-width: 440px; border: 1px solid #334155; }
-        h1, h3 { text-align: center; margin-top: 0; }
-        h1 { color: var(--accent); }
-        input, button { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: none; font-size: 15px; }
-        input { background: var(--bg); color: white; border: 1px solid #475569; }
-        button { background: var(--accent); color: #000; font-weight: bold; cursor: pointer; }
-        .verde { background: var(--green); color: white; }
-        .azul { background: var(--blue); color: white; }
-        .rojo { background: var(--red); color: white; }
-        .gris { background: #475569; color: white; }
-        .barra { display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 12px 15px; border-radius: 10px; border: 1px solid var(--accent); margin-bottom: 12px; }
-        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 15px; }
-        .tabs button { padding: 8px 4px; font-size: 13px; margin: 0; }
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0; }
-        .celda { aspect-ratio: 1; background: #334155; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; }
-        .slot-box { display: flex; justify-content: space-around; background: var(--bg); padding: 20px; border-radius: 12px; border: 2px solid var(--accent); font-size: 46px; margin: 15px 0; }
-        .ranking-item { display: flex; justify-content: space-between; padding: 10px; background: var(--bg); margin: 5px 0; border-radius: 8px; border-left: 4px solid var(--accent); }
-        .cajero-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 8px 10px; margin: 6px 0; border-radius: 8px; font-size: 14px; }
-        .cajero-btns { display: flex; gap: 4px; }
-        .cajero-btns button { width: auto; padding: 6px 8px; font-size: 12px; margin: 0; }
+        :root {
+            --bg-main: #080b12;
+            --bg-header: #0f1522;
+            --bg-card: #151d2e;
+            --bg-hover: #1e293b;
+            --neon-green: #00e676;
+            --neon-green-dark: #00b259;
+            --gold: #fbbf24;
+            --red: #ff3b5c;
+            --blue: #38bdf8;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+        }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: var(--bg-main); color: var(--text); margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+
+        /* HEADER ESTILO GANA EN CASA */
+        .topbar {
+            width: 100%; background: var(--bg-header); border-bottom: 1px solid #1e293b;
+            padding: 12px 18px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 50; box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+        .brand { font-size: 20px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+        .brand span.g1 { color: #fff; }
+        .brand span.g2 { color: var(--neon-green); text-shadow: 0 0 10px rgba(0,230,118,0.4); }
+        
+        .user-wallet { display: flex; align-items: center; gap: 10px; }
+        .saldo-pill {
+            background: #090d16; border: 1px solid var(--neon-green); color: var(--neon-green);
+            padding: 6px 14px; border-radius: 50px; font-weight: 800; font-size: 15px;
+            box-shadow: 0 0 12px rgba(0,230,118,0.15);
+        }
+        .user-badge {
+            background: var(--bg-card); padding: 6px 12px; border-radius: 50px; font-size: 13px;
+            font-weight: 600; color: #e2e8f0; border: 1px solid #28354d; cursor: pointer; user-select: none;
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .wrapper { width: 100%; max-width: 520px; padding: 15px; }
+
+        /* BANNER HERO PROMOCIONAL */
+        .hero-banner {
+            background: linear-gradient(135deg, #064e3b 0%, #0f172a 55%, #1e1b4b 100%);
+            border: 1px solid rgba(0, 230, 118, 0.35); border-radius: 16px;
+            padding: 20px; margin-bottom: 18px; position: relative; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .hero-tag {
+            background: var(--neon-green); color: #000; font-size: 11px; font-weight: 900;
+            padding: 3px 10px; border-radius: 20px; display: inline-block; text-transform: uppercase; margin-bottom: 8px;
+        }
+        .hero-banner h2 { margin: 0 0 5px 0; font-size: 22px; color: #fff; }
+        .hero-banner p { margin: 0; font-size: 13px; color: #cbd5e1; }
+
+        /* LOGIN CARD */
+        .login-box {
+            background: var(--bg-card); border: 1px solid #26334d; border-radius: 18px;
+            padding: 30px 22px; margin-top: 40px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+        input {
+            width: 100%; padding: 14px; margin: 10px 0; border-radius: 10px;
+            background: #090d16; color: #fff; border: 1px solid #2d3b55; font-size: 15px; outline: none;
+        }
+        input:focus { border-color: var(--neon-green); }
+
+        /* BOTONES */
+        .btn {
+            width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: none;
+            font-size: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+            transition: transform 0.1s, box-shadow 0.2s;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-neon { background: var(--neon-green); color: #04130a; box-shadow: 0 4px 15px rgba(0,230,118,0.35); }
+        .btn-gold { background: linear-gradient(90deg, #f59e0b, #fbbf24); color: #000; }
+        .btn-blue { background: var(--blue); color: #04130a; }
+        .btn-red { background: var(--red); color: #fff; }
+
+        /* BARRA DE CATEGORÍAS CON ÍCONOS */
+        .cat-bar {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 18px;
+        }
+        .cat-item {
+            background: var(--bg-card); border: 1px solid #233047; border-radius: 12px;
+            padding: 10px 4px; text-align: center; cursor: pointer; color: var(--muted);
+            font-size: 12px; font-weight: 700; transition: 0.2s;
+        }
+        .cat-item .ico { font-size: 22px; display: block; margin-bottom: 4px; }
+        .cat-item.active {
+            background: linear-gradient(180deg, #163329 0%, #111c24 100%);
+            border-color: var(--neon-green); color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(0,230,118,0.2);
+        }
+
+        /* TARJETA DE JUEGO */
+        .game-panel {
+            background: var(--bg-card); border: 1px solid #233047; border-radius: 16px; padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+        .panel-title { font-size: 16px; font-weight: 800; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px; color: #fff; }
+        .panel-title::before { content: ""; width: 4px; height: 18px; background: var(--neon-green); border-radius: 4px; display: inline-block; }
+
+        /* SLOTS */
+        .slot-machine {
+            display: flex; justify-content: space-around; background: #070a10;
+            padding: 22px 10px; border-radius: 14px; border: 2px solid #26354d;
+            font-size: 48px; margin: 15px 0; box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
+        }
+
+        /* MINAS */
+        .grid-minas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+        .celda {
+            aspect-ratio: 1; background: #1e293b; border-radius: 12px; border-bottom: 4px solid #0f172a;
+            display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer;
+        }
+
+        /* DADOS */
+        .dado-screen {
+            font-size: 46px; font-weight: 900; padding: 22px; background: #070a10;
+            border-radius: 14px; border: 1px solid #26354d; margin: 12px 0; text-align: center; color: var(--gold);
+        }
+
+        /* RANKING & CAJERO */
+        .rank-card {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #0b101b; padding: 12px 14px; margin: 8px 0; border-radius: 10px;
+            border-left: 4px solid var(--neon-green);
+        }
+        .cajero-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #0b101b; padding: 10px 12px; margin: 6px 0; border-radius: 10px; font-size: 14px;
+        }
+        .cajero-btns { display: flex; gap: 5px; }
+        .cajero-btns button { width: auto; padding: 6px 10px; font-size: 12px; margin: 0; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
+
         .oculto { display: none !important; }
     </style>
 </head>
 <body>
-    <div id="login" class="caja">
-        <h1>🎰 CASINO FAMILIAR</h1>
-        <p style="text-align:center; color:#94a3b8;">Ingresa tu nombre para unirte a la sala</p>
-        <input type="text" id="nombre" placeholder="Ej: eze, Mamá, Tío Carlos...">
-        <button type="button" id="btn-entrar">ENTRAR A LA SALA</button>
+
+    <!-- BARRA SUPERIOR FIJA -->
+    <div class="topbar">
+        <div class="brand">🎰 <span class="g1">GANA</span><span class="g2">ENCASA</span></div>
+        <div id="header-user" class="user-wallet oculto">
+            <div class="user-badge">👤 <span id="txt-user"></span></div>
+            <div class="saldo-pill">🪙 <span id="txt-saldo">0</span></div>
+        </div>
     </div>
 
-    <div id="sala" class="caja oculto">
-        <div class="barra">
-            <span style="cursor:pointer; user-select:none;">👤 <b id="txt-user"></b></span>
-            <span style="color:var(--green); font-size:18px;">🪙 <b id="txt-saldo">0</b></span>
+    <div class="wrapper">
+        <!-- PANTALLA DE ACCESO -->
+        <div id="login" class="login-box">
+            <div style="font-size: 42px; margin-bottom: 10px;">👑</div>
+            <h2 style="margin:0 0 6px 0; color:#fff;">BIENVENIDO A LA SALA</h2>
+            <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">Ingresa tu nombre de jugador para comenzar</p>
+            <input type="text" id="nombre" placeholder="Tu nombre o apodo...">
+            <button type="button" id="btn-entrar" class="btn btn-neon">JUGAR AHORA</button>
         </div>
-        <div class="tabs">
-            <button type="button" id="t-slots">🍒 Slots</button>
-            <button type="button" id="t-minas" class="gris">💣 Minas</button>
-            <button type="button" id="t-dados" class="gris">🎲 Dados</button>
-            <button type="button" id="t-rank" class="gris">🏆 Top</button>
-        </div>
-        <div id="v-slots">
-            <h3>🍒 TRAGAMONEDAS VIP</h3>
-            <p style="font-size:12px; text-align:center; color:#94a3b8;">2 iguales = x2 | 3 iguales = x5 | 3 Diamantes 💎 = x10</p>
-            <div class="slot-box"><span id="r1">🍒</span><span id="r2">🍋</span><span id="r3">💎</span></div>
-            <p id="slot-msg" style="text-align:center; font-weight:bold; min-height:20px;"></p>
-            <input type="number" id="apuesta-slot" value="100" min="10">
-            <button type="button" id="btn-girar" class="verde">🎰 GIRAR RODILLOS</button>
-        </div>
-        <div id="v-minas" class="oculto">
-            <h3>💣 MINAS (4x4)</h3>
-            <input type="number" id="apuesta-minas" value="100" min="10">
-            <button type="button" id="btn-jugar-minas" class="verde">APOSTAR Y JUGAR</button>
-            <button type="button" id="btn-retirar" class="verde oculto">RETIRAR: 🪙 <span id="txt-ganancia">0</span></button>
-            <div class="grid" id="tablero"></div>
-        </div>
-        <div id="v-dados" class="oculto">
-            <h3>🎲 DADOS (MAYOR O MENOR)</h3>
-            <div id="dado-num" style="font-size:44px; font-weight:bold; padding:20px; background:var(--bg); border-radius:12px; margin:10px 0; text-align:center; color:var(--accent);">🎲 --</div>
-            <p id="dado-msg" style="text-align:center; font-weight:bold; min-height:20px;"></p>
-            <input type="number" id="apuesta-dados" value="100" min="10">
-            <div style="display:flex; gap:8px;">
-                <button type="button" id="btn-menor" class="azul">🔽 Menor a 50</button>
-                <button type="button" id="btn-mayor" class="verde">🔼 Mayor a 50</button>
+
+        <!-- LOBBY PRINCIPAL -->
+        <div id="sala" class="oculto">
+            <!-- BANNER PROMO -->
+            <div class="hero-banner">
+                <span class="hero-tag">🔥 Sala VIP En Vivo</span>
+                <h2>¡Multiplicá tus fichas!</h2>
+                <p>Jackpot x10 en Slots • Retiro instantáneo en Minas • Ranking en vivo</p>
             </div>
-        </div>
-        <div id="v-rank" class="oculto">
-            <h3>🏆 RANKING FAMILIAR EN VIVO</h3>
-            <div id="lista-ranking">Cargando posiciones...</div>
-        </div>
-        <div id="box-cajero" class="oculto" style="margin-top:15px; border-top:1px dashed #475569; padding-top:10px;">
-            <p style="font-size:13px; color:var(--accent); text-align:center;">Gestión de fichas:</p>
-            <div id="lista-cajero"></div>
-        </div>
-    </div>
 
-    <script type="module" src="./app.js"></script>
-</body>
-</html>
+            <!-- CATEGORÍAS -->
+            <div class="cat-bar">
+                <div id="t-slots" class="cat-item active"><span class="ico">🍒</span>Slots</div>
+                <div id="t-minas" class="cat-item"><span class="ico">💣</span>Minas</div>
+                <div id="t-dados" class="cat-item"><span class="ico">🎲</span>Dados</div>
+                <div id="t-rank" class="cat-item"><span class="ico">🏆</span>Ranking</div>
+            </div>
+
+            <!-- JUEGO 1: SLOTS -->
+            <div id="v-slots" class="game-panel">
+                <div class="panel-title">TRAGAMONEDAS CLÁSICO</div>
+                <p style="font-size:12px; color:var(--muted); margin:0;">Par = x2 • Triple = x5 • 3 Diamantes 💎 = x10</p>
+                <div class="slot-machine"><span id="r1">🍒</span><span id="r2">🍋</span><span id="r3">💎</span></div>
+                <p id="slot-msg" style="text-align:center; font-weight:800; min-height:22px; margin:8px 0;"></p>
+                <input type="number" id="apuesta-slot" value="100" min="10" placeholder="Monto de apuesta">
+                <button type="button" id="btn-girar" class="btn btn-neon">🎰 GIRAR</button>
+            </div>
+
+            <!-- JUEGO 2: MINAS -->
+            <div id="v-minas" class="game-panel oculto">
+                <div class="panel-title">MINAS EXPLOSIVAS (4x4)</div>
+                <p style="font-size:12px; color:var(--muted); margin:0;">Cada diamante multiplica x1.25 • Evita las 3 bombas</p>
 
