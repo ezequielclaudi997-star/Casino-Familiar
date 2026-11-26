@@ -154,7 +154,7 @@
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyB8FoVxL4907KcKyiabnzFnsgVopXnlNpY",
-            authDomain: "://casino-familiar.firebaseapp.com",
+            authDomain: "casino-familiar.firebaseapp.com",
             projectId: "casino-familiar",
             storageBucket: "casino-familiar.firebasestorage.app",
             messagingSenderId: "27006831566",
@@ -299,4 +299,97 @@
         function verTab(tab) {
             if (jugandoMinas || volando) { alert("Termina tu ronda actual primero"); return; }
             var tabs = ["aviator", "slots", "minas", "dados", "rank"];
-            for (var i = 0; i < tabs.length; i++) {
+                for (var i = 0; i < tabs.length; i++) {
+                document.getElementById("v-" + tabs[i]).classList.add("oculto");
+                document.getElementById("t-" + tabs[i]).classList.remove("active");
+            }
+            document.getElementById("v-" + tab).classList.remove("oculto");
+            document.getElementById("t-" + tab).classList.add("active");
+            if (tab === "slots") volverCatalogo();
+        }
+
+        function toqueSecreta() {
+            toques++;
+            if (toques >= 5) {
+                toques = 0;
+                if (prompt("Código:") === "Marina22@") document.getElementById("box-cajero").classList.toggle("oculto");
+            }
+        }
+
+        function girarSlot() {
+            var ap = parseInt(document.getElementById("apuesta-slot").value);
+            if (isNaN(ap) || ap <= 0 || ap > saldo) { alert("Fichas insuficientes"); return; }
+            var btn = document.getElementById("btn-girar");
+            btn.disabled = true;
+            sumarSaldo(-ap);
+            var v = 0;
+            var arr = slotActual.iconos;
+            var iv = setInterval(function() {
+                var s1 = arr[Math.floor(Math.random()*5)], s2 = arr[Math.floor(Math.random()*5)], s3 = arr[Math.floor(Math.random()*5)];
+                document.getElementById("r1").innerText = s1; document.getElementById("r2").innerText = s2; document.getElementById("r3").innerText = s3;
+                v++;
+                if (v >= 10) {
+                    clearInterval(iv); btn.disabled = false;
+                    var msg = document.getElementById("slot-msg");
+                    if (s1 === slotActual.top && s2 === slotActual.top && s3 === slotActual.top) {
+                        sumarSaldo(ap * slotActual.mult); msg.style.color="var(--gold)"; msg.innerText= slotActual.top + " ¡MEGA JACKPOT x" + slotActual.mult + "! +" + (ap * slotActual.mult);
+                    } else if (s1 === s2 && s2 === s3) {
+                        sumarSaldo(ap*5); msg.style.color="var(--neon)"; msg.innerText="🎉 ¡TRIPLE x5! +" + (ap*5);
+                    } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+                        sumarSaldo(ap*2); msg.style.color="var(--neon)"; msg.innerText="✨ ¡PAR x2! +" + (ap*2);
+                    } else {
+                        msg.style.color="var(--red)"; msg.innerText="❌ Sin premio";
+                    }
+                }
+            }, 80);
+        }
+
+        function dibujarMinas() {
+            var t = document.getElementById("tablero"); t.innerHTML = "";
+            for (var i = 0; i < 16; i++) {
+                var d = document.createElement("div"); d.className = "celda"; d.innerText = "❓"; d.setAttribute("data-i", i);
+                d.onclick = function() {
+                    if (!jugandoMinas || this.innerText !== "❓") return;
+                    var idx = parseInt(this.getAttribute("data-i"));
+                    if (bombas.indexOf(idx) !== -1) { this.innerText = "💣"; this.style.background = "#7f1d1d"; jugandoMinas = false; alert("💥 ¡BOOM!"); finMinas(); }
+                    else { this.innerText = "💎"; this.style.background = "#064e3b"; gananciaMinas = Math.floor(gananciaMinas * 1.25); document.getElementById("txt-ganancia").innerText = gananciaMinas; }
+                };
+                t.appendChild(d);
+            }
+        }
+
+        function empezarMinas() {
+            var ap = parseInt(document.getElementById("apuesta-minas").value);
+            if (isNaN(ap) || ap <= 0 || ap > saldo) { alert("Fichas insuficientes"); return; }
+            sumarSaldo(-ap); gananciaMinas = ap; jugandoMinas = true; bombas = [];
+            while (bombas.length < 3) { var r = Math.floor(Math.random()*16); if (bombas.indexOf(r) === -1) bombas.push(r); }
+            document.getElementById("txt-ganancia").innerText = gananciaMinas;
+            document.getElementById("btn-jugar-minas").classList.add("oculto");
+            document.getElementById("btn-retirar").classList.remove("oculto");
+            dibujarMinas();
+        }
+
+        function retirarMinas() {
+            if (!jugandoMinas) return;
+            sumarSaldo(gananciaMinas); alert("🎉 ¡Retiraste 🪙 " + gananciaMinas + "!"); finMinas();
+        }
+
+        function finMinas() {
+            jugandoMinas = false;
+            document.getElementById("btn-jugar-minas").classList.remove("oculto");
+            document.getElementById("btn-retirar").classList.add("oculto");
+        }
+
+        function jugarDado(tipo) {
+            var ap = parseInt(document.getElementById("apuesta-dados").value);
+            if (isNaN(ap) || ap <= 0 || ap > saldo) { alert("Fichas insuficientes"); return; }
+            sumarSaldo(-ap);
+            var num = Math.floor(Math.random()*100) + 1;
+            document.getElementById("dado-num").innerText = "🎲 " + num;
+            var msg = document.getElementById("dado-msg");
+            if ((tipo === "menor" && num < 50) || (tipo === "mayor" && num > 50)) { sumarSaldo(ap*2); msg.style.color="var(--neon)"; msg.innerText="🎉 ¡Ganaste +" + (ap*2) + "!"; }
+            else { msg.style.color="var(--red)"; msg.innerText="❌ Perdiste"; }
+        }
+    </script>
+</body>
+</html>
