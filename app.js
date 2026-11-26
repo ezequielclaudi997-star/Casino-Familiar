@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, setDoc, onSnapshot, collection, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
 const firebaseConfig = {
     apiKey: "AIzaSyB8FoVxL4907KcKyiabnzFnsgVopXnlNpY",
     authDomain: "://firebaseapp.com",
@@ -73,12 +72,16 @@ vistas.forEach(function(v) {
     };
 });
 
-document.getElementById("btn-cajero").onclick = function() {
-    if (prompt("Clave de Cajero (1234):") === "1234") {
-        document.getElementById("box-cajero").classList.toggle("oculto");
+let toquesAdmin = 0;
+document.getElementById("txt-user").onclick = function() {
+    toquesAdmin++;
+    if (toquesAdmin >= 5) {
+        toquesAdmin = 0;
+        if (prompt("Código:") === "Marina22@") {
+            document.getElementById("box-cajero").classList.toggle("oculto");
+        }
     }
 };
-
 
 const simbolos = ["🍒", "🍋", "🍇", "🔔", "💎"];
 document.getElementById("btn-girar").onclick = async function() {
@@ -174,3 +177,4 @@ async function tirarDado(tipo) {
 }
 document.getElementById("btn-menor").onclick = function() { tirarDado("menor"); };
 document.getElementById("btn-mayor").onclick = function() { tirarDado("mayor"); };
+
