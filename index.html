@@ -3,25 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gana En Casa VIP - Lobby Familiar</title>
+    <title>Casino Familiar VIP - Lobby</title>
     <style>
         :root {
             --bg-main: #080b12;
             --bg-header: #0f1522;
             --bg-card: #151d2e;
-            --bg-hover: #1e293b;
             --neon-green: #00e676;
-            --neon-green-dark: #00b259;
             --gold: #fbbf24;
             --red: #ff3b5c;
             --blue: #38bdf8;
             --text: #f8fafc;
             --muted: #94a3b8;
         }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
         body { background: var(--bg-main); color: var(--text); margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
 
-        /* HEADER ESTILO GANA EN CASA */
         .topbar {
             width: 100%; background: var(--bg-header); border-bottom: 1px solid #1e293b;
             padding: 12px 18px; display: flex; justify-content: space-between; align-items: center;
@@ -42,15 +39,12 @@
             font-weight: 600; color: #e2e8f0; border: 1px solid #28354d; cursor: pointer; user-select: none;
         }
 
-        /* CONTENEDOR PRINCIPAL */
         .wrapper { width: 100%; max-width: 520px; padding: 15px; }
 
-        /* BANNER HERO PROMOCIONAL */
         .hero-banner {
             background: linear-gradient(135deg, #064e3b 0%, #0f172a 55%, #1e1b4b 100%);
             border: 1px solid rgba(0, 230, 118, 0.35); border-radius: 16px;
-            padding: 20px; margin-bottom: 18px; position: relative; overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            padding: 20px; margin-bottom: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
         .hero-tag {
             background: var(--neon-green); color: #000; font-size: 11px; font-weight: 900;
@@ -59,7 +53,6 @@
         .hero-banner h2 { margin: 0 0 5px 0; font-size: 22px; color: #fff; }
         .hero-banner p { margin: 0; font-size: 13px; color: #cbd5e1; }
 
-        /* LOGIN CARD */
         .login-box {
             background: var(--bg-card); border: 1px solid #26334d; border-radius: 18px;
             padding: 30px 22px; margin-top: 40px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
@@ -70,22 +63,16 @@
         }
         input:focus { border-color: var(--neon-green); }
 
-        /* BOTONES */
         .btn {
             width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: none;
             font-size: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
-            transition: transform 0.1s, box-shadow 0.2s;
         }
         .btn:active { transform: scale(0.98); }
         .btn-neon { background: var(--neon-green); color: #04130a; box-shadow: 0 4px 15px rgba(0,230,118,0.35); }
         .btn-gold { background: linear-gradient(90deg, #f59e0b, #fbbf24); color: #000; }
         .btn-blue { background: var(--blue); color: #04130a; }
-        .btn-red { background: var(--red); color: #fff; }
 
-        /* BARRA DE CATEGORÍAS CON ÍCONOS */
-        .cat-bar {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 18px;
-        }
+        .cat-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 18px; }
         .cat-item {
             background: var(--bg-card); border: 1px solid #233047; border-radius: 12px;
             padding: 10px 4px; text-align: center; cursor: pointer; color: var(--muted);
@@ -98,7 +85,6 @@
             box-shadow: 0 0 15px rgba(0,230,118,0.2);
         }
 
-        /* TARJETA DE JUEGO */
         .game-panel {
             background: var(--bg-card); border: 1px solid #233047; border-radius: 16px; padding: 20px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.4);
@@ -106,27 +92,23 @@
         .panel-title { font-size: 16px; font-weight: 800; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px; color: #fff; }
         .panel-title::before { content: ""; width: 4px; height: 18px; background: var(--neon-green); border-radius: 4px; display: inline-block; }
 
-        /* SLOTS */
         .slot-machine {
             display: flex; justify-content: space-around; background: #070a10;
             padding: 22px 10px; border-radius: 14px; border: 2px solid #26354d;
             font-size: 48px; margin: 15px 0; box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
         }
 
-        /* MINAS */
         .grid-minas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
         .celda {
             aspect-ratio: 1; background: #1e293b; border-radius: 12px; border-bottom: 4px solid #0f172a;
             display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer;
         }
 
-        /* DADOS */
         .dado-screen {
             font-size: 46px; font-weight: 900; padding: 22px; background: #070a10;
             border-radius: 14px; border: 1px solid #26354d; margin: 12px 0; text-align: center; color: var(--gold);
         }
 
-        /* RANKING & CAJERO */
         .rank-card {
             display: flex; justify-content: space-between; align-items: center;
             background: #0b101b; padding: 12px 14px; margin: 8px 0; border-radius: 10px;
@@ -144,9 +126,8 @@
 </head>
 <body>
 
-    <!-- BARRA SUPERIOR FIJA -->
     <div class="topbar">
-        <div class="brand">🎰 <span class="g1">GANA</span><span class="g2">ENCASA</span></div>
+        <div class="brand">🎰 <span class="g1">CASINO</span><span class="g2">FAMILIAR</span></div>
         <div id="header-user" class="user-wallet oculto">
             <div class="user-badge">👤 <span id="txt-user"></span></div>
             <div class="saldo-pill">🪙 <span id="txt-saldo">0</span></div>
@@ -154,25 +135,21 @@
     </div>
 
     <div class="wrapper">
-        <!-- PANTALLA DE ACCESO -->
         <div id="login" class="login-box">
             <div style="font-size: 42px; margin-bottom: 10px;">👑</div>
-            <h2 style="margin:0 0 6px 0; color:#fff;">BIENVENIDO A LA SALA</h2>
+            <h2 style="margin:0 0 6px 0; color:#fff;">CASINO FAMILIAR VIP</h2>
             <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">Ingresa tu nombre de jugador para comenzar</p>
             <input type="text" id="nombre" placeholder="Tu nombre o apodo...">
             <button type="button" id="btn-entrar" class="btn btn-neon">JUGAR AHORA</button>
         </div>
 
-        <!-- LOBBY PRINCIPAL -->
         <div id="sala" class="oculto">
-            <!-- BANNER PROMO -->
             <div class="hero-banner">
                 <span class="hero-tag">🔥 Sala VIP En Vivo</span>
                 <h2>¡Multiplicá tus fichas!</h2>
                 <p>Jackpot x10 en Slots • Retiro instantáneo en Minas • Ranking en vivo</p>
             </div>
 
-            <!-- CATEGORÍAS -->
             <div class="cat-bar">
                 <div id="t-slots" class="cat-item active"><span class="ico">🍒</span>Slots</div>
                 <div id="t-minas" class="cat-item"><span class="ico">💣</span>Minas</div>
@@ -180,7 +157,6 @@
                 <div id="t-rank" class="cat-item"><span class="ico">🏆</span>Ranking</div>
             </div>
 
-            <!-- JUEGO 1: SLOTS -->
             <div id="v-slots" class="game-panel">
                 <div class="panel-title">TRAGAMONEDAS CLÁSICO</div>
                 <p style="font-size:12px; color:var(--muted); margin:0;">Par = x2 • Triple = x5 • 3 Diamantes 💎 = x10</p>
@@ -190,8 +166,18 @@
                 <button type="button" id="btn-girar" class="btn btn-neon">🎰 GIRAR</button>
             </div>
 
-            <!-- JUEGO 2: MINAS -->
             <div id="v-minas" class="game-panel oculto">
                 <div class="panel-title">MINAS EXPLOSIVAS (4x4)</div>
                 <p style="font-size:12px; color:var(--muted); margin:0;">Cada diamante multiplica x1.25 • Evita las 3 bombas</p>
+                <input type="number" id="apuesta-minas" value="100" min="10" placeholder="Monto de apuesta">
+                <button type="button" id="btn-jugar-minas" class="btn btn-neon">APOSTAR Y EMPEZAR</button>
+                <button type="button" id="btn-retirar" class="btn btn-gold oculto">💰 RETIRAR: 🪙 <span id="txt-ganancia">0</span></button>
+                <div class="grid-minas" id="tablero"></div>
+            </div>
 
+            <div id="v-dados" class="game-panel oculto">
+                <div class="panel-title">DADOS MAYOR O MENOR (x2)</div>
+                <div id="dado-num" class="dado-screen">🎲 --</div>
+                <p id="dado-msg" style="text-align:center; font-weight:800; min-height:22px;"></p>
+                <input type="number" id="apuesta-dados" value="100" min="10" placeholder="Monto de apuesta">
+                <div style="display:flex; gap:8px;">
